@@ -2,10 +2,19 @@ name: Main
 on: push
 
 jobs:
-  lint-and-test:
+  lints-and-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
       - run: make setup
       - run: make lint
       - run: make test
+
+  snyk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
